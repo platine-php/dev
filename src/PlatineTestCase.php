@@ -55,6 +55,8 @@ use org\bovigo\vfs\vfsStreamFile;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionProperty;
+use VirtualFileSystem\Structure\Directory;
+use VirtualFileSystem\Structure\File;
 
 /**
  * @class PlatineTestCase
@@ -155,6 +157,32 @@ class PlatineTestCase extends TestCase
             return vfsStream::newDirectory($name)->at($destination);
         }
         return vfsStream::newDirectory($name);
+    }
+
+    /**
+     * Create new virtual file
+     * @param string $filename
+     * @param string|null $content
+     * @return File
+     */
+    public function createFile(string $filename, ?string $content = null): File
+    {
+        $fs = new PlatineFileSystem();
+        return $fs->createFile($filename, $content);
+    }
+
+    /**
+     * Create new virtual directory
+     * @param string $path
+     * @param bool $recursive
+     * @param int|null $mode
+     * @return Directory
+     */
+    public function createDirectory(string $path, bool $recursive = false, ?int $mode = null): Directory
+    {
+        $fs = new PlatineFileSystem();
+
+        return $fs->createDirectory($path, $recursive, $mode);
     }
 
     /**

@@ -110,6 +110,28 @@ class PlatineTestCaseTest extends TestCase
         $this->assertInstanceOf(vfsStreamDirectory::class, $vfsDir);
     }
 
+
+    public function testCreateFile(): void
+    {
+        $p = new PlatineTestCase();
+
+        $filename = '/app.txt';
+        $f = $p->createFile($filename, 'foo');
+        $this->assertEquals('/app.txt', $f->path());
+        $this->assertEquals('foo', $f->data());
+    }
+
+
+    public function testCreateDirectory(): void
+    {
+        $p = new PlatineTestCase();
+
+        $path = '/platine';
+        $o = $p->createDirectory($path, true);
+
+        $this->assertEquals('/platine', $o->path());
+    }
+
     public function testGetClassMethodsToMockMockAllMethod(): void
     {
         $className = ClassToMock::class;
@@ -198,7 +220,7 @@ class PlatineTestCaseTest extends TestCase
         $a22 = $p->getPropertyValue(ClassToMock::class, $instance, 'a');
         $this->assertEquals(22, $a22);
     }
-    
+
     public function testCommandOutput(): void
     {
         $p = new PlatineTestCase();
