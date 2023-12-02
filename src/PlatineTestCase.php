@@ -65,18 +65,32 @@ use VirtualFileSystem\Structure\File;
 class PlatineTestCase extends TestCase
 {
     /**
-     * @codeCoverageIgnore
-     * @return void
+     * The Platine File system instance
+     * @var PlatineFileSystem
      */
-    protected function tearDown(): void
+    protected PlatineFileSystem $fs;
+
+    /**
+     * Return the virtual file system
+     * @return PlatineFileSystem
+     */
+    public function getPlatineFileSystem(): PlatineFileSystem
     {
-        //restore all mock variable global value to "false"
-        foreach ($GLOBALS as $key => $value) {
-            if (substr((string) $key, 0, 5) === 'mock_') {
-                $GLOBALS[$key] = false;
-            }
-        }
+        return $this->fs;
     }
+
+    /**
+     * Set the virtual file system
+     * @param PlatineFileSystem $fs
+     * @return $this
+     */
+    public function setPlatineFileSystem(PlatineFileSystem $fs): self
+    {
+        $this->fs = $fs;
+        return $this;
+    }
+
+
 
     /**
      * Method to test private & protected method
@@ -167,8 +181,7 @@ class PlatineTestCase extends TestCase
      */
     public function createFile(string $filename, ?string $content = null): File
     {
-        $fs = new PlatineFileSystem();
-        return $fs->createFile($filename, $content);
+        return $this->fs->createFile($filename, $content);
     }
 
     /**
@@ -180,9 +193,7 @@ class PlatineTestCase extends TestCase
      */
     public function createDirectory(string $path, bool $recursive = false, ?int $mode = null): Directory
     {
-        $fs = new PlatineFileSystem();
-
-        return $fs->createDirectory($path, $recursive, $mode);
+        return $this->fs->createDirectory($path, $recursive, $mode);
     }
 
     /**
@@ -308,5 +319,19 @@ class PlatineTestCase extends TestCase
     {
         $result = str_replace("\n", PHP_EOL, $expected);
         $this->assertEquals($result, $output);
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        //restore all mock variable global value to "false"
+        foreach ($GLOBALS as $key => $value) {
+            if (substr((string) $key, 0, 5) === 'mock_') {
+                $GLOBALS[$key] = false;
+            }
+        }
     }
 }
