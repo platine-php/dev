@@ -70,27 +70,16 @@ class PlatineTestCase extends TestCase
      */
     protected PlatineFileSystem $fs;
 
-    /**
-     * Return the virtual file system
-     * @return PlatineFileSystem
-     */
-    public function getPlatineFileSystem(): PlatineFileSystem
-    {
-        return $this->fs;
-    }
-
-    /**
-     * Set the virtual file system
-     * @param PlatineFileSystem $fs
+     /**
+     * Enable support of virtual file system
      * @return $this
      */
-    public function setPlatineFileSystem(PlatineFileSystem $fs): self
+    public function enableFileSystem(): self
     {
-        $this->fs = $fs;
+        $this->fs = new PlatineFileSystem();
+
         return $this;
     }
-
-
 
     /**
      * Method to test private & protected method

@@ -115,8 +115,7 @@ class PlatineTestCaseTest extends TestCase
     public function testCreateFile(): void
     {
         $p = new PlatineTestCase();
-        $p->setPlatineFileSystem(new PlatineFileSystem());
-        $this->assertInstanceOf(PlatineFileSystem::class, $p->getPlatineFileSystem());
+        $p->enableFileSystem();
         $filename = '/app.txt';
         $f = $p->createFile($filename, 'foo');
         $this->assertEquals('/app.txt', $f->path());
@@ -126,7 +125,7 @@ class PlatineTestCaseTest extends TestCase
     public function testCreateDirectory(): void
     {
         $p = new PlatineTestCase();
-        $p->setPlatineFileSystem(new PlatineFileSystem());
+        $p->enableFileSystem();
         $path = '/platine';
         $o = $p->createDirectory($path, true);
 
