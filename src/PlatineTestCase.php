@@ -62,7 +62,6 @@ use ReflectionProperty;
  */
 class PlatineTestCase extends TestCase
 {
-
     /**
      * @codeCoverageIgnore
      * @return void

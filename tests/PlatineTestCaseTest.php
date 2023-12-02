@@ -19,7 +19,6 @@ use ReflectionProperty;
  */
 class PlatineTestCaseTest extends TestCase
 {
-
     public function testGetPrivateProtectedAttribute(): void
     {
         $p = new PlatineTestCase();

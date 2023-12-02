@@ -6,7 +6,6 @@ namespace Platine\Test\Fixture\Dev;
 
 class GetPrivateProtectedAttributeTestClass
 {
-
     /**
      *
      * @var string
