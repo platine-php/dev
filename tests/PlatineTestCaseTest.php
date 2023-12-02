@@ -198,4 +198,12 @@ class PlatineTestCaseTest extends TestCase
         $a22 = $p->getPropertyValue(ClassToMock::class, $instance, 'a');
         $this->assertEquals(22, $a22);
     }
+    
+    public function testCommandOutput(): void
+    {
+        $p = new PlatineTestCase();
+
+        $expected = 'a';
+        $p->assertCommandOutput($expected, 'a');
+    }
 }

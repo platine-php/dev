@@ -269,4 +269,16 @@ class PlatineTestCase extends TestCase
         $reflection = $this->getPrivateProtectedAttribute($class, $name);
         $reflection->setValue($instance, $value);
     }
+
+    /**
+     * Test assert command expected given output
+     * @param string $expected
+     * @param string $output
+     * @return void
+     */
+    public function assertCommandOutput(string $expected, string $output): void
+    {
+        $result = str_replace("\n", PHP_EOL, $expected);
+        $this->assertEquals($result, $output);
+    }
 }
