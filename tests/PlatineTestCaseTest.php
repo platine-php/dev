@@ -9,7 +9,6 @@ use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\vfsStreamFile;
 use PHPUnit\Framework\TestCase;
-use Platine\Dev\PlatineFileSystem;
 use Platine\Dev\PlatineTestCase;
 use Platine\Test\Fixture\Dev\ClassToMock;
 use Platine\Test\Fixture\Dev\GetPrivateProtectedAttributeTestClass;
@@ -109,27 +108,6 @@ class PlatineTestCaseTest extends TestCase
 
         $this->assertEquals($directory, $vfsDirNoParent->path());
         $this->assertInstanceOf(vfsStreamDirectory::class, $vfsDir);
-    }
-
-
-    public function testCreateFile(): void
-    {
-        $p = new PlatineTestCase();
-        $p->enableFileSystem();
-        $filename = '/app.txt';
-        $f = $p->createFile($filename, 'foo');
-        $this->assertEquals('/app.txt', $f->path());
-        $this->assertEquals('foo', $f->data());
-    }
-
-    public function testCreateDirectory(): void
-    {
-        $p = new PlatineTestCase();
-        $p->enableFileSystem();
-        $path = '/platine';
-        $o = $p->createDirectory($path, true);
-
-        $this->assertEquals('/platine', $o->path());
     }
 
     public function testGetClassMethodsToMockMockAllMethod(): void
