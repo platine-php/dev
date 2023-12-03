@@ -268,6 +268,7 @@ class PlatineTestCase extends TestCase
             $this->assertEquals($expected, $output);
         } else {
             $expected = str_replace("\n", "\r\n", str_replace("\r", '', $expected));
+            $output = str_replace("\n", "\r\n", str_replace("\r", '', $output));
             $this->assertEquals($expected, $output);
         }
     }
