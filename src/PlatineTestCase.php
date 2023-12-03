@@ -264,13 +264,10 @@ class PlatineTestCase extends TestCase
      */
     public function assertCommandOutput(string $expected, string $output): void
     {
-        if(DIRECTORY_SEPARATOR === '/'){
-            $this->assertEquals($expected, $output);
-        } else {
-            $expected = str_replace("\n", "\r\n", str_replace("\r", '', $expected));
-            $output = str_replace("\n", "\r\n", str_replace("\r", '', $output));
-            $this->assertEquals($expected, $output);
-        }
+        $formattedExpected = preg_replace('~\r\n?~', "\n", $expected);
+        $formattedOutput = preg_replace('~\r\n?~', "\n", $output);
+        
+        $this->assertEquals($formattedExpected, $formattedOutput);
     }
 
     /**
