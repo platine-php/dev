@@ -266,7 +266,7 @@ class PlatineTestCase extends TestCase
     {
         $formattedExpected = preg_replace('~\r\n?~', "\n", $expected);
         $formattedOutput = preg_replace('~\r\n?~', "\n", $output);
-        
+
         $this->assertEquals($formattedExpected, $formattedOutput);
     }
 
