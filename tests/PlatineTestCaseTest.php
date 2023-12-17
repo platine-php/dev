@@ -11,14 +11,46 @@ use org\bovigo\vfs\vfsStreamFile;
 use PHPUnit\Framework\TestCase;
 use Platine\Dev\PlatineTestCase;
 use Platine\Test\Fixture\Dev\ClassToMock;
+use Platine\Test\Fixture\Dev\CreateObjectAll;
+use Platine\Test\Fixture\Dev\CreateObjectIsNotInstantiable;
+use Platine\Test\Fixture\Dev\CreateObjectNoConstructor;
+use Platine\Test\Fixture\Dev\ExpectMethodCallCountBase;
+use Platine\Test\Fixture\Dev\ExpectMethodCallCountDep;
 use Platine\Test\Fixture\Dev\GetPrivateProtectedAttributeTestClass;
 use ReflectionProperty;
+use stdClass;
 
 /**
  * PlatineTestCase class tests
  */
 class PlatineTestCaseTest extends TestCase
 {
+    public function testCreateObjectIsNotInstantiable(): void
+    {
+        $p = new PlatineTestCase();
+
+        $this->assertNull($p->createObject(CreateObjectIsNotInstantiable::class));
+    }
+
+    public function testCreateObjectNoConstructor(): void
+    {
+        $p = new PlatineTestCase();
+
+        $this->assertInstanceOf(CreateObjectNoConstructor::class, $p->createObject(CreateObjectNoConstructor::class));
+    }
+
+    public function testCreateObjectAll(): void
+    {
+        $p = new PlatineTestCase();
+        $p->setClassCreateObjectMaps(CreateObjectAll::class, ['a' => 78]);
+        $o = $p->createObject(CreateObjectAll::class);
+
+        $this->assertInstanceOf(CreateObjectAll::class, $o);
+        $this->assertEquals(78, $o->a);
+        $this->assertEquals(5, $o->b);
+        $this->assertInstanceOf(stdClass::class, $o->c);
+    }
+
     public function testGetPrivateProtectedAttribute(): void
     {
         $p = new PlatineTestCase();
@@ -49,6 +81,20 @@ class PlatineTestCaseTest extends TestCase
 
         $this->assertEquals('foo', $name);
         $this->assertEquals(246, $value);
+    }
+
+    public function testExpectMethodCallCount(): void
+    {
+        $p = new PlatineTestCase();
+
+        $base = $this->getMockBuilder(ExpectMethodCallCountBase::class)
+                    ->getMock();
+
+
+        $p->expectMethodCallCount($base, 'call', 1);
+
+        $o = new ExpectMethodCallCountDep();
+        $o->callBase($base);
     }
 
     public function testCreateVfsFile(): void

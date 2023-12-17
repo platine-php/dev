@@ -54,6 +54,8 @@ use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\vfsStreamFile;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use ReflectionNamedType;
+use ReflectionParameter;
 use ReflectionProperty;
 
 /**
@@ -62,6 +64,89 @@ use ReflectionProperty;
  */
 class PlatineTestCase extends TestCase
 {
+    /**
+     * The class create object maps
+     * @var array<class-string, array<string, mixed>>
+     */
+    protected array $createObjectMaps = [];
+
+
+    /**
+     * Set create object map
+     * @param class-string $class
+     * @param array<string, mixed> $maps
+     * @return $this
+     */
+    public function setClassCreateObjectMaps(string $class, array $maps): self
+    {
+        $this->createObjectMaps[$class] = $maps;
+
+        return $this;
+    }
+
+    /**
+     * Create object
+     * @param class-string $class
+     * @return object|null
+     */
+    public function createObject(string $class): ?object
+    {
+        $rc = new ReflectionClass($class);
+
+        if ($rc->isInstantiable() === false) {
+            return null;
+        }
+
+        $constructor = $rc->getConstructor();
+
+        if ($constructor === null) {
+            return $rc->newInstanceWithoutConstructor();
+        }
+
+        $arguments = [];
+        $parameters = $constructor->getParameters();
+        $maps = $this->createObjectMaps[$class] ?? [];
+        foreach ($parameters as /** @var ReflectionParameter $parameter */ $parameter) {
+            $name = $parameter->getName();
+            if (array_key_exists($name, $maps)) {
+                $arguments[] = $maps[$name];
+                continue;
+            }
+
+            /** @var ReflectionNamedType $type */
+            $type = $parameter->getType();
+            $value = null;
+            if ($type !== null && $type->isBuiltin() === false) {
+                // Create Mock
+                $className = $type->getName();
+                $value = $this->getMockInstance($className);
+            }
+
+            if ($value === null) {
+                if ($parameter->isDefaultValueAvailable()) {
+                    $value = $parameter->getDefaultValue();
+                }
+            }
+
+            $arguments[] = $value;
+        }
+
+        return $rc->newInstanceArgs($arguments);
+    }
+
+    /**
+     * Test object method call count
+     * @param object $object
+     * @param string $method
+     * @param int $count
+     * @return void
+     */
+    public function expectMethodCallCount(object $object, string $method, int $count = 1): void
+    {
+        $object->expects($this->exactly($count))
+                ->method($method);
+    }
+
     /**
      * Method to test private & protected method
      *

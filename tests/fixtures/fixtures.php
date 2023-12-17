@@ -4,6 +4,44 @@ declare(strict_types=1);
 
 namespace Platine\Test\Fixture\Dev;
 
+use stdClass;
+
+abstract class CreateObjectIsNotInstantiable
+{
+}
+
+class ExpectMethodCallCountBase
+{
+    public function call(): void
+    {
+    }
+}
+
+class ExpectMethodCallCountDep
+{
+    public function callBase(ExpectMethodCallCountBase $a)
+    {
+        $a->call();
+    }
+}
+
+class CreateObjectNoConstructor
+{
+}
+
+class CreateObjectAll
+{
+    public $a;
+    public $b;
+    public stdClass $c;
+    public function __construct($a, stdClass $c, $b = 5)
+    {
+        $this->a = $a;
+        $this->b = $b;
+        $this->c = $c;
+    }
+}
+
 class GetPrivateProtectedAttributeTestClass
 {
     /**
