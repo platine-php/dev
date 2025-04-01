@@ -115,7 +115,7 @@ class PlatineTestCase extends TestCase
                 continue;
             }
 
-            /** @var ReflectionNamedType $type */
+            /** @var ReflectionNamedType|null $type */
             $type = $parameter->getType();
             $value = null;
             if ($type !== null && $type->isBuiltin() === false) {
