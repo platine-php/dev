@@ -12,7 +12,7 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/03a3bd1809cc46e7baf5fa23bbbcb540)](https://app.codacy.com/gh/platine-php/dev/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
 
 ### Requirements 
-- **PHP >= 7.4**, **PHP 8** 
+- **PHP >= 8.0**
 
 ### Installation
 #### Using composer (recommended)
