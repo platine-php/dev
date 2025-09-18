@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Platine\Test\Fixture\Dev;
 
+use Exception;
 use stdClass;
 
 abstract class CreateObjectIsNotInstantiable
@@ -82,5 +83,15 @@ class ClassToMock
     public function b(int $param): bool
     {
         return $param > 0;
+    }
+
+    public function c(): self
+    {
+        return $this;
+    }
+
+    public function d(): void
+    {
+        throw new Exception();
     }
 }

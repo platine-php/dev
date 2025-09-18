@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Platine\Test;
 
+use Exception;
 use InvalidArgumentException;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
@@ -164,7 +165,7 @@ class PlatineTestCaseTest extends TestCase
         $methods = $p->getClassMethodsToMock($className, []);
 
         $this->assertIsArray($methods);
-        $this->assertCount(2, $methods);
+        $this->assertCount(4, $methods);
         $this->assertContains('a', $methods);
         $this->assertContains('b', $methods);
 
@@ -185,7 +186,7 @@ class PlatineTestCaseTest extends TestCase
         $methods = $p->getClassMethodsToMock($className, ['a']);
 
         $this->assertIsArray($methods);
-        $this->assertCount(1, $methods);
+        $this->assertCount(3, $methods);
         $this->assertContains('b', $methods);
 
         /** @var ClassToMock $mock */
@@ -214,6 +215,25 @@ class PlatineTestCaseTest extends TestCase
         $this->assertEquals(50, $mock->a());
         $this->assertTrue($mock->b(34));
         $this->assertFalse($mock->b(-34));
+    }
+
+    public function testGetMockInstanceSelf(): void
+    {
+        $p = new PlatineTestCase();
+
+        $mock = $p->getMockInstance(ClassToMock::class, ['c' => 'self'], ['b']);
+        $this->assertEquals(0, $mock->c()->a());
+        $this->assertTrue($mock->b(34));
+        $this->assertFalse($mock->b(-34));
+    }
+
+    public function testGetMockInstanceException(): void
+    {
+        $p = new PlatineTestCase();
+
+        $mock = $p->getMockInstance(ClassToMock::class, ['d' => new Exception()], ['b']);
+        $this->expectException(Exception::class);
+        $mock->d();
     }
 
     public function testGetMockInstanceMap(): void
