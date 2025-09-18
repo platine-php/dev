@@ -59,6 +59,7 @@ use ReflectionNamedType;
 use ReflectionObject;
 use ReflectionParameter;
 use ReflectionProperty;
+use Throwable;
 
 /**
  * @class PlatineTestCase
@@ -223,7 +224,7 @@ class PlatineTestCase extends TestCase
      */
     public function createVfsDirectory(
         string $name,
-        vfsStreamContainer $destination = null
+        ?vfsStreamContainer $destination = null
     ): vfsStreamDirectory {
         if ($destination !== null) {
             return vfsStream::newDirectory($name)->at($destination);
@@ -279,6 +280,22 @@ class PlatineTestCase extends TestCase
                     ->getMock();
 
         foreach ($mockMethods as $method => $returnValue) {
+            if ($returnValue === 'self') {
+                $mock->expects($this->any())
+                    ->method($method)
+                    ->will($this->returnSelf());
+
+                continue;
+            }
+
+            if ($returnValue instanceof Throwable) {
+                $mock->expects($this->any())
+                    ->method($method)
+                    ->will($this->throwException($returnValue));
+
+                continue;
+            }
+
             $mock->expects($this->any())
                 ->method($method)
                 ->will($this->returnValue($returnValue));
