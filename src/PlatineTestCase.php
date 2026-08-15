@@ -215,12 +215,12 @@ class PlatineTestCase extends TestCase
     /**
      * Create virtual directory
      * @param  string $name
-     * @param  vfsStreamContainer<vfsStreamContainerIterator> $destination
+     * @param  vfsStreamContainer<vfsStreamContainerIterator>|null $destination
      * @return vfsStreamDirectory
      */
     public function createVfsDirectory(
         string $name,
-        vfsStreamContainer $destination = null
+        ?vfsStreamContainer $destination = null
     ): vfsStreamDirectory {
         if ($destination) {
             return vfsStream::newDirectory($name)->at($destination);
