@@ -166,7 +166,9 @@ class PlatineTestCase extends TestCase
     ) {
         $reflection = new ReflectionObject($object);
         $reflectionMethod = $reflection->getMethod($method);
-        $reflectionMethod->setAccessible(true);
+        if (PHP_VERSION_ID < 80100) {
+            $reflectionMethod->setAccessible(true);
+        }
         return $reflectionMethod->invokeArgs($object, $args);
     }
 
@@ -181,7 +183,9 @@ class PlatineTestCase extends TestCase
         string $attr
     ): ReflectionProperty {
         $rProp = new ReflectionProperty($className, $attr);
-        $rProp->setAccessible(true);
+        if (PHP_VERSION_ID < 80100) {
+            $rProp->setAccessible(true);
+        }
         return $rProp;
     }
 
